@@ -80,6 +80,21 @@ def check_and_click_button(driver, locator, timeout=10):
     except (TimeoutException, NoSuchElementException, AssertionError) as e:
         print(f"Failed to click the button: {e}")
 
+def submit_blank_form(driver):
+    submit = driver.find_element(By.XPATH, "//input[@value='Submit']")
+    submit.click()
+    try:
+        
+        error_message = driver.find_element(By.XPATH, "//label[@class='hs-error-msg hs-main-font-element' and text()='Please complete this required field.']")
+        
+        error_message2 = driver.find_element(By.XPATH, "//label[@class='hs-main-font-element' and text()='Please complete all required fields.']")
+        assert error_message.is_displayed() and error_message2.is_displayed(), f"Expected 'Please complete this required field.' but got: {error_message.text}"
+        print(f"Correct error message for blank form submit: {error_message.text}")
+    except Exception as e:
+        print(f"Failed to assert error message for blank form submit : {str(e)}")
+   
+    
+
 def fill_with_invalid_inputs(driver):
      invalid_input='<>'
      first_name_field = driver.find_element(By.ID, 'firstname-4b87b19b-0cb4-4159-a394-2eff153274d3')
@@ -216,6 +231,7 @@ def main():
 
     WebDriverWait(driver, 20).until(EC.visibility_of_element_located(popup_locator))
     driver.switch_to.frame("hs-form-iframe-0")
+    submit_blank_form(driver)
     try:
         fill_with_invalid_inputs(driver)
     except AssertionError as e:
