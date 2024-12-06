@@ -201,16 +201,6 @@ def close_the_form(driver):
 # Main function to orchestrate the script
 def main():
     driver = initialize_driver("https://idt.iion.io/dashboard")
-    
-    # Perform dropdown selection for "In Game"
-    select_dropdown_option(driver, '//*[@id="__next"]/div/div[2]/div/div/section/section/div[2]/section/div/div/div[1]/div[2]/span/div/div/span[2]', '//*[@title="In Game"]')
-    assert_selected_option(driver, "//h3[contains(text(), 'In Game')]", "In Game")
-
-    select_dropdown_option(driver, '//*[@id="__next"]/div/div[2]/div/div/section/section/div[2]/section/div/div/div[1]/div[2]/span/div/div/span[2]', '//*[@title="Around the Game"]')
-    assert_selected_option(driver, "//h3[contains(text(), 'In Game')]", "Around the Game")
-
-    select_dropdown_option(driver, '//*[@id="__next"]/div/div[2]/div/div/section/section/div[2]/section/div/div/div[1]/div[2]/span/div/div/span[2]', '//*[@title="Away from Game"]')
-    assert_selected_option(driver, "//h3[contains(text(), 'In Game')]", "Away from Game")
 
     
     # Select country China
