@@ -36,7 +36,7 @@ driver.execute_script("arguments[0].setAttribute('style', 'stroke: red; stroke-w
 actions = ActionChains(driver)
 actions.move_to_element(random_country).click().perform()
 
-# Wait for the tooltip to appear (adjust the time if necessary)
+# Wait for the tooltip to appear
 time.sleep(2)
 
 # Extract the tooltip text
@@ -51,9 +51,8 @@ try:
         tooltip_ad_request = int(ad_request_line.split("(")[1].split(")")[0].replace(",", ""))
         print("Tooltip Ad Request Value:", tooltip_ad_request)
     else:
-        print("Tooltip text does not contain 'Ad Request:'")
-        driver.quit()
-        exit()
+        print("Tooltip text does not contain 'Ad Request'.")
+        tooltip_ad_request = 0  # Default to 0 if not found
 except Exception as e:
     print("Tooltip not found or failed to load:", str(e))
     driver.quit()
@@ -61,10 +60,31 @@ except Exception as e:
 
 # Extract Ad Request values for the three categories on the page
 try:
-    around_game_ad_request = int(''.join(filter(str.isdigit, driver.find_element(By.XPATH, '//*[@id="rc-tabs-2-panel-1"]').text)))
-    in_game_ad_request = int(''.join(filter(str.isdigit, driver.find_element(By.XPATH, '//*[@id="rc-tabs-0-panel-1"]').text)))
-    away_from_game_ad_request = int(''.join(filter(str.isdigit, driver.find_element(By.XPATH, '//*[@id="rc-tabs-1-panel-1"]').text)))
+    # Around the Game Ad Request
+    try:
+        around_game_element = driver.find_element(By.XPATH, '//*[@id="rc-tabs-2-panel-1"]')
+        around_game_ad_request = int(''.join(filter(str.isdigit, around_game_element.text)))
+    except Exception:
+        around_game_ad_request = 0
+        print("Around the Game Ad Request not found. Defaulting to 0.")
 
+    # In Game Ad Request
+    try:
+        in_game_element = driver.find_element(By.XPATH, '//*[@id="rc-tabs-0-panel-1"]')
+        in_game_ad_request = int(''.join(filter(str.isdigit, in_game_element.text)))
+    except Exception:
+        in_game_ad_request = 0
+        print("In Game Ad Request not found. Defaulting to 0.")
+
+    # Away from Game Ad Request
+    try:
+        away_from_game_element = driver.find_element(By.XPATH, '//*[@id="rc-tabs-1-panel-1"]')
+        away_from_game_ad_request = int(''.join(filter(str.isdigit, away_from_game_element.text)))
+    except Exception:
+        away_from_game_ad_request = 0
+        print("Away from Game Ad Request not found. Defaulting to 0.")
+
+    # Print Ad Request values
     print("Around the Game Ad Request:", around_game_ad_request)
     print("In Game Ad Request:", in_game_ad_request)
     print("Away from Game Ad Request:", away_from_game_ad_request)
