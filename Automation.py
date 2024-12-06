@@ -10,9 +10,21 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 # Function to initialize the WebDriver and open the page
 def initialize_driver(url):
     driver = webdriver.Chrome()  
+    
     driver.get(url)
+
+
+    try:
+        WebDriverWait(driver, 10).until(
+        lambda d: d.current_url == url  
+    )
+    
+        assert driver.current_url == url, f"URL does not match. Current URL: {driver.current_url}"
+        print("URL assertion passed! Page loaded successfully.")
+
+    except Exception as e:
+        print(f"Test failed with error: {e}")
     driver.maximize_window()
-    time.sleep(5)
     return driver
 
 
@@ -230,6 +242,7 @@ def main():
     popup_locator = (By.CLASS_NAME, "ant-modal-body")
 
     WebDriverWait(driver, 20).until(EC.visibility_of_element_located(popup_locator))
+    time.sleep(10)
     driver.switch_to.frame("hs-form-iframe-0")
     submit_blank_form(driver)
     try:
