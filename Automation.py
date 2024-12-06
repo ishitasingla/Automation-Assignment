@@ -9,7 +9,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 # Function to initialize the WebDriver and open the page
 def initialize_driver(url):
-    driver = webdriver.Chrome()  # Update with the path to your driver
+    driver = webdriver.Chrome()  
     driver.get(url)
     driver.maximize_window()
     time.sleep(5)
@@ -46,7 +46,7 @@ def select_country(driver, country_xpath, search_xpath, country_name):
     time.sleep(5)
 
 
-# Function to reset filters and assert the initial state
+# Function to reset filters 
 def reset_filters_and_assert(driver):
     reset_filters_button = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div[2]/div/div/section/section/div[2]/section/div/div/div[1]/div[3]')
     reset_filters_button.click()
@@ -99,7 +99,7 @@ def fill_with_invalid_inputs(driver):
      except Exception as e:
         print(f"An error occurred while testing First Name field: {e}")
 
-    # Test for Last Name Field
+   
      try:
         last_name_field.clear()
         last_name_field.send_keys(invalid_input)
@@ -110,7 +110,7 @@ def fill_with_invalid_inputs(driver):
      except Exception as e:
         print(f"An error occurred while testing Last Name field: {e}")
 
-    # Test for Company Field
+   
      try:
         company_field.clear()
         company_field.send_keys(invalid_input)
@@ -143,7 +143,7 @@ def test_invalid_email_submission(driver, email):
 
 # Function to handle form submission with proper input and validation
 def fill_and_submit_form(driver, firstname, lastname, email, company):
-    # Find the fields and fill them
+   
     firstname_field = driver.find_element(By.ID, 'firstname-4b87b19b-0cb4-4159-a394-2eff153274d3')
     firstname_field.clear()
     assert firstname_field.is_displayed() and firstname_field.is_enabled(), "Firstname field is not interactable."
@@ -176,7 +176,7 @@ def fill_and_submit_form(driver, firstname, lastname, email, company):
     assert company_field.get_attribute("value") == company, f"Company field was not filled correctly. Expected: {company}, Found: {company_field.get_attribute('value')}"
     print(f"Company name field is filled properly as expected: {company}")
 
-    # Optionally, you can also click the submit button here
+   
     submit_button = driver.find_element(By.XPATH, "//input[@value='Submit']")
     submit_button.click()
     
@@ -198,19 +198,18 @@ def close_the_form(driver):
     dashboard_tab = driver.find_element(By.XPATH, "//a[@href='/dashboard']")
     assert dashboard_tab.get_attribute("id") == "activeNavLink", "Dashboard tab is not active, navigation may have failed."
     print("Dashboard tab is active. Navigation successful.")
-# Main function to orchestrate the script
+
 def main():
     driver = initialize_driver("https://idt.iion.io/dashboard")
 
-    
-    # Select country China
+   
     select_country(driver, '//*[@id="__next"]/div/div[2]/div/div/section/section/div[2]/section/div/div/div[1]/div[1]/span[2]/div/div/span[2]', "//span[@class='ant-select-selection-search']/input[@type='search']", "China")
     assert_selected_option(driver, '//*[@id="__next"]/div/div[2]/div/div/section/section/div[2]/section/div/div/div[1]/div[1]/span[2]/div/div/span[2]', "China")
     
-    # Reset filters and check default state
+    
     reset_filters_and_assert(driver)
     
-    # Check and click a button
+   
     check_and_click_button(driver, (By.XPATH, "//a[@href='/inventory']"))
     print("Assertion passed: The button is clickable and displayed.")
     popup_locator = (By.CLASS_NAME, "ant-modal-body")
@@ -223,7 +222,7 @@ def main():
         print(f"Invalid inputs test failed: {e}")
     
    
-    # Test email validation
+   
     invalid_emails = [
         "invalid_email.com",
         "test@domain",
@@ -233,7 +232,7 @@ def main():
     for email in invalid_emails:
         test_invalid_email_submission(driver, email)
     
-    # Fill the form and submit
+    
     
     fill_and_submit_form(driver, "Ishita", "Singla", "ishitasingla123@gmail.com", "XYZ")
     close_the_form(driver)
